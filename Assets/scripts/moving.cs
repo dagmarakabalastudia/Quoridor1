@@ -36,7 +36,6 @@ public class moving : MonoBehaviour
     public GameObject[] allObjects;
     GameObject[] allBlocks;
     GameObject[] buttonBlock;
-    GameObject[] changeBlock = new GameObject[1];
     GameObject[] moveBlock;
     GameObject[,] gameBoard = new GameObject[17, 17];
     public names names;
@@ -97,7 +96,6 @@ public class moving : MonoBehaviour
                 changes.gameObject.SetActive(true);
                 changesCube.SetActive(true);
             }
-            changeBlock = GameObject.FindGameObjectsWithTag("change");
             buttonBlock[0].GetComponent<MeshRenderer>().material = disabledButton;
             moveBlock[0].GetComponent<MeshRenderer>().material = button;
 
@@ -109,7 +107,6 @@ public class moving : MonoBehaviour
             whatToDoText.text = "Wybierz miejsce ściany na planszy";
             changes.gameObject.SetActive(true);
             changesCube.SetActive(true);
-            changeBlock = GameObject.FindGameObjectsWithTag("change");
             buttonBlock[0].GetComponent<MeshRenderer>().material = button;
             moveBlock[0].GetComponent<MeshRenderer>().material = disabledButton;
         }
@@ -549,13 +546,9 @@ public class moving : MonoBehaviour
         if(playersBlock[i] == blockForPlayer)
         {
             buttonBlock[0].GetComponent<MeshRenderer>().material = disabledButton;
-            if (changeBlock[0] != null)
+            if (changesCube.activeSelf == true)
             {
-                if (changeBlock[0].activeSelf == true)
-                {
-                    changeBlock[0].GetComponent<MeshRenderer>().material = button;
-
-                }
+                changesCube.GetComponent<MeshRenderer>().material = button;
 
             }
             what = 1;
@@ -563,13 +556,10 @@ public class moving : MonoBehaviour
         else
         {
             buttonBlock[0].GetComponent<MeshRenderer>().material = button;
-            if (changeBlock[0] != null)
+            if(changesCube.activeSelf == true)
             {
-                if(changeBlock[0].activeSelf == true)
-                {
-                    changeBlock[0].GetComponent<MeshRenderer>().material = button;
+                changesCube.GetComponent<MeshRenderer>().material = button;
 
-                }
             }
             moveBlock[0].GetComponent<MeshRenderer>().material = button;
 
