@@ -32,9 +32,12 @@ public class moving : MonoBehaviour
     int i = 0;
     int what = 0;
     int m = 0;
+    int activePlane;
     public GameObject[] allObjects;
     GameObject[] allBlocks;
     GameObject[] buttonBlock;
+    GameObject[] changeBlock = new GameObject[1];
+    GameObject[] moveBlock;
     GameObject[,] gameBoard = new GameObject[17, 17];
     public names names;
     public GameObject player1;
@@ -42,6 +45,7 @@ public class moving : MonoBehaviour
     public GameObject player3;
     public GameObject player4;
     public GameObject pause;
+    public GameObject info;
     public TMP_Text changes;
     public GameObject changesCube;
     List<int> resultsPlayer0 = new List<int>();
@@ -54,6 +58,7 @@ public class moving : MonoBehaviour
     {
         createPlayers();
         buttonBlock = GameObject.FindGameObjectsWithTag("createBlock");
+        moveBlock = GameObject.FindGameObjectsWithTag("move");
         y = select.transform.position.y;
         players = GameObject.FindGameObjectsWithTag("Player");
         blockForPlayer = 20/players.Length;
@@ -87,8 +92,15 @@ public class moving : MonoBehaviour
         {
             movePlayers();
             whatToDoText.text = "Wybierz miejsce ruchu na planszy";
-            changes.gameObject.SetActive(true);
-            changesCube.SetActive(true);
+            if (playersBlock[i] != blockForPlayer)
+            {
+                changes.gameObject.SetActive(true);
+                changesCube.SetActive(true);
+            }
+            changeBlock = GameObject.FindGameObjectsWithTag("change");
+            buttonBlock[0].GetComponent<MeshRenderer>().material = disabledButton;
+            moveBlock[0].GetComponent<MeshRenderer>().material = button;
+
         }
         else
         {
@@ -97,6 +109,9 @@ public class moving : MonoBehaviour
             whatToDoText.text = "Wybierz miejsce ściany na planszy";
             changes.gameObject.SetActive(true);
             changesCube.SetActive(true);
+            changeBlock = GameObject.FindGameObjectsWithTag("change");
+            buttonBlock[0].GetComponent<MeshRenderer>().material = button;
+            moveBlock[0].GetComponent<MeshRenderer>().material = disabledButton;
         }
     }
     void setPlaneTable()
@@ -217,7 +232,7 @@ public class moving : MonoBehaviour
                         {
                             select5.SetActive(true);
                             select5.transform.position = new Vector3(player.position.x - 10, y, player.position.z + 10);
-                            if (gameBoard[(int)player.position.x / 5 - 2, (int)player.position.z / 5 - 2] != null || gameBoard[(int)player.position.x / 5 - 2, (int)player.position.z / 5 - 1] != null)
+                            if (gameBoard[(int)player.position.x / 5 - 2, (int)player.position.z / 5 + 2] != null || gameBoard[(int)player.position.x / 5 - 2, (int)player.position.z / 5 + 1] != null)
                             {
                                 select5.SetActive(false);
                             }
@@ -254,7 +269,7 @@ public class moving : MonoBehaviour
                                 if (player.transform.position.z - 10 > -1)
                                 {
                                     select.transform.position = new Vector3(player.position.x - 10, y, player.position.z - 10);
-                                    if (gameBoard[(int)player.position.x / 5 - 2, (int)player.position.z / 5 - 2] != null)
+                                    if (gameBoard[(int)player.position.x / 5 - 2, (int)player.position.z / 5 - 2] != null || gameBoard[(int)player.position.x / 5 - 2, (int)player.position.z / 5 - 1] != null)
                                     {
                                         select.transform.position = new Vector3(0, -1, 0);
                                     }
@@ -263,7 +278,7 @@ public class moving : MonoBehaviour
                                 {
                                     select5.SetActive(true);
                                     select5.transform.position = new Vector3(player.position.x - 10, y, player.position.z + 10);
-                                    if (gameBoard[(int)player.position.x / 5 - 2, (int)player.position.z / 5 + 2] != null || gameBoard[(int)player.position.x / 5 - 1, (int)player.position.z / 5 + 2] != null)
+                                    if (gameBoard[(int)player.position.x / 5 - 2, (int)player.position.z / 5 + 2] != null || gameBoard[(int)player.position.x / 5 - 2, (int)player.position.z / 5 + 1] != null)
                                     {
                                         select5.SetActive(false);
                                     }
@@ -313,19 +328,20 @@ public class moving : MonoBehaviour
                                     if (player.position.z - 10 > -1)
                                     {
                                         select2.transform.position = new Vector3(player.position.x + 10, y, player.position.z - 10);
-                                        if (gameBoard[(int)player.position.x / 5 + 2, (int)player.position.z / 5 - 2] != null)
+                                        if (gameBoard[(int)player.position.x / 5 + 2, (int)player.position.z / 5 - 2] != null || gameBoard[(int)player.position.x / 5 + 2, (int)player.position.z / 5 - 1] ) 
                                         {
                                             select2.transform.position = new Vector3(0, -1, 0);
                                         }
                                     }
-                                    if (player.position.z + 10 < 81)
+                                    
+                                }
+                                if (player.position.z + 10 < 81)
+                                {
+                                    select5.SetActive(true);
+                                    select5.transform.position = new Vector3(player.position.x + 10, y, player.position.z + 10);
+                                    if (gameBoard[(int)player.position.x / 5 + 2, (int)player.position.z / 5 + 2] != null || gameBoard[(int)player.position.x / 5 + 2, (int)player.position.z / 5 + 1] != null)
                                     {
-                                        select5.SetActive(true);
-                                        select5.transform.position = new Vector3(player.position.x + 10, y, player.position.z + 10);
-                                        if (gameBoard[(int)player.position.x / 5 + 2, (int)player.position.z / 5 + 2] != null || gameBoard[(int)player.position.x / 5 + 2, (int)player.position.z / 5 + 1] != null)
-                                        {
-                                            select5.SetActive(false);
-                                        }
+                                        select5.SetActive(false);
                                     }
                                 }
                             }
@@ -362,7 +378,7 @@ public class moving : MonoBehaviour
                     {
                         if (gameBoard[(int)player.position.x / 5, (int)player.position.z / 5 - 3] != null)
                         {
-                            if(player.position.x - 10 > 0)
+                            if (player.position.x - 10 > 0)
                             {
                                 if (gameBoard[(int)player.position.x / 5 - 1, (int)player.position.z / 5 - 2] != null)
                                 {
@@ -372,20 +388,18 @@ public class moving : MonoBehaviour
                                 {
                                     select3.transform.position = new Vector3(0, -1, 0);
                                 }
-                                else
+                                select3.transform.position = new Vector3(player.position.x + 10, y, player.position.z - 10);
+                                select5.SetActive(true);
+                                select5.transform.position = new Vector3(player.position.x - 10, y, player.position.z - 10);
+                                if (gameBoard[(int)player.position.x / 5 + 2, (int)player.position.z / 5 - 2] != null || gameBoard[(int)player.position.x / 5 + 1, (int)player.position.z / 5 - 2] != null)
                                 {
-                                    select3.transform.position = new Vector3(player.position.x + 10, y, player.position.z - 10);
-                                    select5.SetActive(true);
-                                    select5.transform.position = new Vector3(player.position.x - 10, y, player.position.z - 10);
-                                    if (gameBoard[(int)player.position.x / 5 + 2, (int)player.position.z / 5 - 2] != null)
-                                    {
-                                        select3.transform.position = new Vector3(0, -1, 0);
-                                    }
-                                    if (gameBoard[(int)player.position.x / 5 - 2, (int)player.position.z / 5 - 2] != null)
-                                    {
-                                        select5.SetActive(false);
-                                    }
+                                    select3.transform.position = new Vector3(0, -1, 0);
                                 }
+                                if (gameBoard[(int)player.position.x / 5 - 2, (int)player.position.z / 5 - 2] != null || gameBoard[(int)player.position.x / 5 - 1, (int)player.position.z / 5 - 2] != null)
+                                {
+                                    select5.SetActive(false);
+                                }
+
                             }
                             if (gameBoard[(int)player.position.x / 5 + 2, (int)player.position.z / 5 - 2] != null)
                             {
@@ -424,47 +438,40 @@ public class moving : MonoBehaviour
                     {
                         if (gameBoard[(int)player.position.x / 5, (int)player.position.z / 5 + 3] != null)
                         {
-                            if (gameBoard[(int)player.position.x / 5 + 1, (int)player.position.z / 5 + 2] != null)
+                            select5.SetActive(true);
+                            select5.transform.position = new Vector3(player.position.x - 10, y, player.position.z + 10);
+                            if (gameBoard[(int)player.position.x / 5 - 2, (int)player.position.z / 5 + 2] != null || gameBoard[(int)player.position.x / 5 - 1, (int)player.position.z / 5 + 2] != null)
+                            {
+                                select5.SetActive(false);
+                            }
+                            if (gameBoard[(int)player.transform.position.x / 5 + 2, (int)player.transform.position.z / 5 - 2] != null || gameBoard[(int)player.transform.position.x / 5 + 1, (int)player.transform.position.z / 5 - 2] != null)
                             {
                                 select4.transform.position = new Vector3(0, -1, 0);
                             }
-                            else if (gameBoard[(int)player.position.x / 5 + 1, (int)player.position.z / 5 + 2] != null)
-                            {
-                                if (gameBoard[(int)player.transform.position.x / 5 + 2, (int)player.transform.position.z / 5 - 2] != null)
-                                {
-                                    select4.transform.position = new Vector3(0, -1, 0);
-                                }
-                                else
-                                {
-                                    select4.transform.position = new Vector3(player.position.x - 10, y, player.position.z + 10);
-                                }
-                            }
                             else
                             {
-                                if(player.position.z + 10 < 81)
-                                {
-                                    select4.transform.position = new Vector3(player.position.x + 10, y, player.position.z + 10);
-                                }
-                                if (player.position.z - 10 > -1)
-                                {
-                                    select5.SetActive(true);
-                                    select5.transform.position = new Vector3(player.position.x - 10, y, player.position.z + 10);
-                                }
-               
-                                if (gameBoard[(int)player.position.x / 5 + 2, (int)player.position.z / 5 + 2] != null )
-                                {
-                                    select4.transform.position = new Vector3(0, -1, 0);
-                                }
-                                
+                                select4.transform.position = new Vector3(player.position.x - 10, y, player.position.z + 10);
+                            }
+                            if (player.position.z + 10 < 81)
+                            {
+                                select4.transform.position = new Vector3(player.position.x + 10, y, player.position.z + 10);
+                            }
+                            if (gameBoard[(int)player.position.x / 5 + 2, (int)player.position.z / 5 + 2] != null || gameBoard[(int)player.position.x / 5 + 2, (int)player.position.z / 5 + 1] != null)
+                            {
+                                select4.transform.position = new Vector3(0, -1, 0);
                             }
                             if (gameBoard[(int)player.position.x / 5 - 2, (int)player.position.z / 5 - 2] != null)
+                            {
+                                select4.transform.position = new Vector3(0, -1, 0);
+                            }
+                            if (gameBoard[(int)player.position.x / 5 + 1, (int)player.position.z / 5 + 2] != null)
                             {
                                 select4.transform.position = new Vector3(0, -1, 0);
                             }
                         }
                         else if (gameBoard[(int)player.position.x / 5, (int)player.position.z / 5 + 4] != null)
                         {
-                            if(select4.transform.position != new Vector3(player.position.x + 10, y, player.position.z + 10))
+                            if (select4.transform.position != new Vector3(player.position.x + 10, y, player.position.z + 10))
                             {
                                 select4.transform.position = new Vector3(0, -1, 0);
                             }
@@ -474,23 +481,17 @@ public class moving : MonoBehaviour
                             select4.transform.position = new Vector3(player.position.x, y, player.position.z + 20);
 
                         }
-                        if (gameBoard[(int)player.position.x / 5 - 2, (int)player.position.z / 5 + 2] != null || gameBoard[(int)player.position.x / 5 - 1, (int)player.position.z / 5 + 2] != null)
-                        {
-                            select5.SetActive(false);
-                        }
                     }
-                    if (player.position.x == 80 && player.position.z == 70)
-                    {
-                        select4.transform.position = new Vector3(0, -1, 0);
-                        select5.SetActive(true);
-                    }
+                        
                 }
-            }
+            }   
         }
         else
         {
             select4.transform.position = new Vector3(0, -1, 0);
         }
+        howManyActivePlane();
+ 
     }
     void findBlocks()
     {
@@ -518,7 +519,7 @@ public class moving : MonoBehaviour
         {
             if (players[0].transform.position.z == 0)
             {
-                names.winner = names.namesTable[i+3];
+                names.winner = names.namesTable[i-1];
                 Application.LoadLevel("endGame");
             }
             if(players[2].transform.position.z == 80)
@@ -533,7 +534,7 @@ public class moving : MonoBehaviour
             }
             if (players[3].transform.position.x == 80)
             {
-                names.winner = names.namesTable[i-1];
+                names.winner = names.namesTable[i+3];
                 Application.LoadLevel("endGame");
             }
         }
@@ -548,11 +549,29 @@ public class moving : MonoBehaviour
         if(playersBlock[i] == blockForPlayer)
         {
             buttonBlock[0].GetComponent<MeshRenderer>().material = disabledButton;
+            if (changeBlock[0] != null)
+            {
+                if (changeBlock[0].activeSelf == true)
+                {
+                    changeBlock[0].GetComponent<MeshRenderer>().material = button;
+
+                }
+
+            }
             what = 1;
         }
         else
         {
             buttonBlock[0].GetComponent<MeshRenderer>().material = button;
+            if (changeBlock[0] != null)
+            {
+                if(changeBlock[0].activeSelf == true)
+                {
+                    changeBlock[0].GetComponent<MeshRenderer>().material = button;
+
+                }
+            }
+            moveBlock[0].GetComponent<MeshRenderer>().material = button;
 
             if (Input.GetMouseButtonDown(0))
             {
@@ -592,6 +611,7 @@ public class moving : MonoBehaviour
                     select3.SetActive(false);
                     select4.SetActive(false);
                     select5.SetActive(false);
+                    here.transform.position = new Vector3(500, y, 500);
                     switch (what)
                     {
                         case 1:
@@ -753,7 +773,7 @@ public class moving : MonoBehaviour
             }
         }
     }
-   void checkIfRoadExist()
+    void checkIfRoadExist()
     {
         resultsPlayer0.Clear();
         resultsPlayer1.Clear();
@@ -763,7 +783,9 @@ public class moving : MonoBehaviour
         if (names.howManyPlayers == 2)
         {
             aStar((int)players[0].transform.position.x/5+1, (int)players[0].transform.position.z/5+1, 1, 1, resultsPlayer0);
+            aStar((int)players[0].transform.position.x/5+1, (int)players[0].transform.position.z/5+1, 17, 1, resultsPlayer0);
             aStar((int)players[1].transform.position.x/5+1, (int)players[1].transform.position.z/5+1, 1, 17, resultsPlayer1);
+            aStar((int)players[1].transform.position.x/5+1, (int)players[1].transform.position.z/5+1, 17, 17, resultsPlayer1);
             for (int q = 1; q < 17; q = q+2)
             {
                 if (gameBoard[q, 0] != null)
@@ -779,9 +801,13 @@ public class moving : MonoBehaviour
         else if(names.howManyPlayers == 4)
         {
             aStar((int)players[0].transform.position.x/5+1, (int)players[0].transform.position.z/5+1, 1, 1, resultsPlayer0);
+            aStar((int)players[0].transform.position.x/5+1, (int)players[0].transform.position.z/5+1, 17, 1, resultsPlayer0);
             aStar((int)players[1].transform.position.x/5+1, (int)players[1].transform.position.z/5+1, 1, 1, resultsPlayer1);
+            aStar((int)players[1].transform.position.x/5+1, (int)players[1].transform.position.z/5+1, 1, 17, resultsPlayer1);
             aStar((int)players[2].transform.position.x/5+1, (int)players[2].transform.position.z/5+1, 1,17, resultsPlayer2);
+            aStar((int)players[2].transform.position.x/5+1, (int)players[2].transform.position.z/5+1, 17,17, resultsPlayer2);
             aStar((int)players[3].transform.position.x/5+1, (int)players[3].transform.position.z/5+1, 17, 1, resultsPlayer3);
+            aStar((int)players[3].transform.position.x/5+1, (int)players[3].transform.position.z/5+1, 17, 17, resultsPlayer3);
 
             for (int q = 1; q < 17; q = q+2)
             {
@@ -913,6 +939,30 @@ public class moving : MonoBehaviour
             }
         }
     }
+    void howManyActivePlane()
+    {
+        activePlane = 0;
+        if((int)select.transform.position.y == -1)
+        {
+            activePlane += 1;
+        }
+        if ((int)select2.transform.position.y == -1)
+        {
+            activePlane += 1;
+        }
+        if ((int)select3.transform.position.y == -1)
+        {
+            activePlane += 1;
+        }
+        if ((int)select4.transform.position.y == -1)
+        {
+            activePlane += 1;
+        }
+        if (activePlane == 4 && playersBlock[i] == blockForPlayer)
+        {
+            info.SetActive(true);
+        }
+    }
     public void backToStart()
     {
         Application.LoadLevel("start");
@@ -924,6 +974,12 @@ public class moving : MonoBehaviour
     public void exit()
     {
         Application.Quit();
+    }
+    public void skipQueue()
+    {
+        i++;
+        info.SetActive(false);
+        what = 0;
     }
 }
 public class Location
