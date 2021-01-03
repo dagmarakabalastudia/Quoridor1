@@ -53,6 +53,10 @@ public class moving : MonoBehaviour
     List<int> resultsPlayer3 = new List<int>();
     List<int> allResults = new List<int>();
     GameObject[,] helperGameBoard = new GameObject[19, 19];
+    public TMP_Text playerPinkName;
+    public TMP_Text playerGreenName;
+    public TMP_Text playerBlueName;
+    public TMP_Text playerYellowName;
     void Start()
     {
         createPlayers();
@@ -168,6 +172,8 @@ public class moving : MonoBehaviour
         {
             Instantiate(player1, new Vector3(40, 15, 80), Quaternion.identity);
             Instantiate(player2, new Vector3(40, 15, 0), Quaternion.identity);
+            playerYellowName.text = names.namesTable[0];
+            playerBlueName.text = names.namesTable[1];
         }
         else if(names.howManyPlayers == 4)
         {
@@ -175,6 +181,10 @@ public class moving : MonoBehaviour
             Instantiate(player3, new Vector3(80, 15, 40), Quaternion.identity);
             Instantiate(player2, new Vector3(40, 15, 0), Quaternion.identity);
             Instantiate(player4, new Vector3(0, 15, 40), Quaternion.identity);
+            playerYellowName.text = names.namesTable[0];
+            playerPinkName.text = names.namesTable[1];
+            playerBlueName.text = names.namesTable[2];
+            playerGreenName.text = names.namesTable[3];
         }
     }
     void movePlayer()
